@@ -23,7 +23,7 @@ func allArticles(w http.ResponseWriter, r *http.Request) {
 	articles := Articles{
 		Article{Title: "Test Title", Desc: "Test Description", Content: "bruh"},
 	}
-	fmt.Fprintf(w, "Hell ya bitches")
+	fmt.Fprintf(w, "Hell ya")
 	json.NewEncoder(w).Encode(articles)
 
 }
@@ -59,14 +59,12 @@ const (
 	PersonAgeCol = "age"
 )
 
-// Person is the database model for a person
 type Person struct {
 	FirstName string
 	LastName  string
 	Age       uint
 }
 
-// CreatePersonTable uses db to create a new table for Person models, and returns the result
 func CreatePersonTable(db *sql.DB) (sql.Result, error) {
 	return db.Exec(
 		fmt.Sprintf("CREATE TABLE %s (%s varchar(255), %s varchar(255), %s int)",
@@ -78,7 +76,6 @@ func CreatePersonTable(db *sql.DB) (sql.Result, error) {
 	)
 }
 
-// InsertPerson inserts person into db
 func InsertPerson(db *sql.DB, person Person) (sql.Result, error) {
 	return db.Exec(
 		fmt.Sprintf("INSERT INTO %s VALUES(?, ?, ?)", PersonTableName),
@@ -88,7 +85,6 @@ func InsertPerson(db *sql.DB, person Person) (sql.Result, error) {
 	)
 }
 
-// SelectPerson selects a person with the given first & last names and age. On success, writes the result into result and on failure, returns a non-nil error and makes no modifications to result
 func SelectPerson(db *sql.DB, firstName, lastName string, age uint, result *Person) error {
 	row := db.QueryRow(
 		fmt.Sprintf(
@@ -113,7 +109,6 @@ func SelectPerson(db *sql.DB, firstName, lastName string, age uint, result *Pers
 	return nil
 }
 
-// UpdatePerson updates the person with the given first & last names and age with newPerson. Returns a non-nil error if the update failed, and nil if the update succeeded
 func UpdatePerson(db *sql.DB, firstName, lastName string, age uint, newPerson Person) error {
 	_, err := db.Exec(
 		fmt.Sprintf(
@@ -136,7 +131,6 @@ func UpdatePerson(db *sql.DB, firstName, lastName string, age uint, newPerson Pe
 	return err
 }
 
-// DeletePerson deletes the person with the given first & last names and age. Returns a non-nil error if the delete failed, and nil if the delete succeeded
 func DeletePerson(db *sql.DB, firstName, lastName string, age uint) error {
 	_, err := db.Exec(
 		fmt.Sprintf(
@@ -166,7 +160,7 @@ func main() {
 	}
 	log.Printf("Created")
 
-	me := Person{FirstName: "Aaron", LastName: "Schlesinger", Age: 29}
+	me := Person{FirstName: "Miles", LastName: "Bronson", Age: 20}
 	log.Printf("Inserting %+v into the DB", me)
 	if _, insErr := InsertPerson(db, me); insErr != nil {
 		log.Fatalf("Error inserting new person into the DB (%s)", insErr)
@@ -184,7 +178,7 @@ func main() {
 	updatedMe := Person{
 		FirstName: "Miles",
 		LastName:  "Bronson",
-		Age:       69,
+		Age:       25,
 	}
 	if err := UpdatePerson(db, selectedMe.FirstName, selectedMe.LastName, selectedMe.Age, updatedMe); err != nil {
 		log.Fatalf("Error updating person in the DB (%s)", err)
