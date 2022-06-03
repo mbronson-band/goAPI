@@ -1,17 +1,19 @@
 package main
 
 import (
-	//"encoding/json"
+	"encoding/json"
 	"fmt"
 	"log"
 
-	//"net/http"
 	"database/sql"
+	"net/http"
 
 	_ "github.com/snowflakedb/gosnowflake"
+
+	_ "github.com/gorilla/mux"
 )
 
-/*type Article struct {
+type Article struct {
 	Title   string `json:"Title"`
 	Desc    string `json:"desc"`
 	Content string `json:"content"`
@@ -38,7 +40,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleRequests() {
-	myRouter := mux.NewRouter.StrictSlash(true)
+	myRouter := mux.NewRouter()
 	myRouter.HandleFunc("/", homePage)
 	myRouter.HandleFunc("/articles", allArticles).Methods("GET")
 	myRouter.HandleFunc("/articles", testPostArticles).Methods("POST")
@@ -46,7 +48,6 @@ func handleRequests() {
 	log.Fatal(http.ListenAndServe(":8082", myRouter))
 
 }
-*/
 
 const (
 	// PersonTableName is the name of the table for the person model
@@ -153,13 +154,13 @@ func main() {
 	if err != nil {
 		log.Fatalf("error opening DB (%s)", err)
 	}
-
-	log.Printf("Creating new table")
-	if _, crErr := CreatePersonTable(db); crErr != nil {
-		log.Fatalf("Error creating table (%s)", crErr)
-	}
-	log.Printf("Created")
-
+	/*
+		log.Printf("Creating new table")
+		if _, crErr := CreatePersonTable(db); crErr != nil {
+			log.Fatalf("Error creating table (%s)", crErr)
+		}
+		log.Printf("Created")
+	*/
 	me := Person{FirstName: "Miles", LastName: "Bronson", Age: 20}
 	log.Printf("Inserting %+v into the DB", me)
 	if _, insErr := InsertPerson(db, me); insErr != nil {
